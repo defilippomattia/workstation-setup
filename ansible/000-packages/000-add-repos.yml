@@ -1,0 +1,88 @@
+---
+- name: Configure Fedora workstation
+  hosts: localhost
+  connection: local
+  become: true
+
+  tasks:
+    # - name: Install packages
+    #   ansible.builtin.dnf:
+    #     name:
+    #       - vim
+    #       - go
+    #       - chromium
+    #       - keepassxc
+    #       - gnome-tweaks
+    #     state: present
+
+
+    # - name: Install vscode
+    #   ansible.builtin.dnf:
+    #     name:
+    #       - code
+    #     state: present
+
+
+    - name: Import Microsoft GPG key
+      ansible.builtin.rpm_key:
+        key: https://packages.microsoft.com/keys/microsoft.asc
+        state: present
+  
+    - name: Import RPM Fusion Free GPG key
+      ansible.builtin.rpm_key:
+        key: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-2020
+        state: present
+
+    - name: Import RPM Fusion NonFree GPG key
+      ansible.builtin.rpm_key:
+        key: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-nonfree-fedora-2020
+        state: present
+
+    - name: Add HashiCorp repository
+      ansible.builtin.get_url:
+        url: https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+        dest: /etc/yum.repos.d/hashicorp.repo
+
+    - name: Add Visual Studio Code repository
+      ansible.builtin.yum_repository:
+        name: code
+        description: Visual Studio Code
+        baseurl: https://packages.microsoft.com/yumrepos/vscode
+        enabled: true
+        gpgcheck: true
+        gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+
+    - name: Add RPM Fusion Free repository
+      ansible.builtin.dnf:
+        name: https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ ansible_facts.distribution_major_version }}.noarch.rpm
+        state: present
+
+    - name: Add RPM Fusion Nonfree repository
+      ansible.builtin.dnf:
+        name: https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_facts.distribution_major_version }}.noarch.rpm
+        state: present
+
+    # - name: Swap ffmpeg-free for full ffmpeg
+    #   ansible.builtin.command:
+    #     cmd: dnf swap -y ffmpeg-free ffmpeg --allowerasing
+    #   register: ffmpeg_swap
+    #   changed_when: "'Nothing to do' not in ffmpeg_swap.stdout"
+
+    # - name: Swap mesa VA-API drivers to freeworld
+    #   ansible.builtin.command:
+    #     cmd: dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
+    #   register: mesa_va_swap
+    #   changed_when: "'Nothing to do' not in mesa_va_swap.stdout"
+
+    # - name: Swap mesa VDPAU drivers to freeworld
+    #   ansible.builtin.command:
+    #     cmd: dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+    #   register: mesa_vdpau_swap
+    #   changed_when: "'Nothing to do' not in mesa_vdpau_swap.stdout"
+
+
+    # - name: Install terraform
+    #   ansible.builtin.dnf:
+    #     name:
+    #       - terraform
+    #     state: present

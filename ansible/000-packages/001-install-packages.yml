@@ -1,0 +1,37 @@
+---
+- name: Configure Fedora workstation
+  hosts: localhost
+  connection: local
+  become: true
+
+  tasks:
+    - name: Install packages
+      ansible.builtin.dnf:
+        name:
+          - vim
+          - go
+          - chromium
+          - keepassxc
+          - gnome-tweaks
+          - terraform
+          - code
+        state: present
+
+    - name: Swap ffmpeg-free for full ffmpeg
+      ansible.builtin.command:
+        cmd: dnf swap -y ffmpeg-free ffmpeg --allowerasing
+      register: ffmpeg_swap
+      changed_when: "'Nothing to do' not in ffmpeg_swap.stdout"
+
+    - name: Swap mesa VA-API drivers to freeworld
+      ansible.builtin.command:
+        cmd: dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
+      register: mesa_va_swap
+      changed_when: "'Nothing to do' not in mesa_va_swap.stdout"
+
+    - name: Swap mesa VDPAU drivers to freeworld
+      ansible.builtin.command:
+        cmd: dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+      register: mesa_vdpau_swap
+      changed_when: "'Nothing to do' not in mesa_vdpau_swap.stdout"
+
