@@ -6,7 +6,7 @@ Ansible and some other scripts for setting up a new linux workstation (Fedora).
 
 ```
 sudo dnf install pipx                                                                   
-sudo pipx install --include-deps ansible
+pipx install --include-deps ansible
 
 git clone https://github.com/defilippomattia/workstation-setup
 cd workstation-setup

@@ -5,24 +5,6 @@
   become: true
 
   tasks:
-    # - name: Install packages
-    #   ansible.builtin.dnf:
-    #     name:
-    #       - vim
-    #       - go
-    #       - chromium
-    #       - keepassxc
-    #       - gnome-tweaks
-    #     state: present
-
-
-    # - name: Install vscode
-    #   ansible.builtin.dnf:
-    #     name:
-    #       - code
-    #     state: present
-
-
     - name: Import Microsoft GPG key
       ansible.builtin.rpm_key:
         key: https://packages.microsoft.com/keys/microsoft.asc
@@ -62,27 +44,11 @@
         name: https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_facts.distribution_major_version }}.noarch.rpm
         state: present
 
-    # - name: Swap ffmpeg-free for full ffmpeg
-    #   ansible.builtin.command:
-    #     cmd: dnf swap -y ffmpeg-free ffmpeg --allowerasing
-    #   register: ffmpeg_swap
-    #   changed_when: "'Nothing to do' not in ffmpeg_swap.stdout"
-
-    # - name: Swap mesa VA-API drivers to freeworld
-    #   ansible.builtin.command:
-    #     cmd: dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
-    #   register: mesa_va_swap
-    #   changed_when: "'Nothing to do' not in mesa_va_swap.stdout"
-
-    # - name: Swap mesa VDPAU drivers to freeworld
-    #   ansible.builtin.command:
-    #     cmd: dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
-    #   register: mesa_vdpau_swap
-    #   changed_when: "'Nothing to do' not in mesa_vdpau_swap.stdout"
-
-
-    # - name: Install terraform
-    #   ansible.builtin.dnf:
-    #     name:
-    #       - terraform
-    #     state: present
+    - name: Add Docker CE repository
+      ansible.builtin.yum_repository:
+        name: docker-ce
+        description: Docker CE Repository
+        baseurl: https://download.docker.com/linux/fedora/$releasever/$basearch/stable
+        enabled: true
+        gpgcheck: true
+        gpgkey: https://download.docker.com/linux/fedora/gpg
