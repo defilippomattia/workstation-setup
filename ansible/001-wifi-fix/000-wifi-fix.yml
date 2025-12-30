@@ -1,0 +1,33 @@
+---
+- name: Configure WiFi power save and rtw8852be module
+  hosts: localhost
+  connection: local
+  become: true
+  tasks:
+
+    - name: Configure WiFi power save
+      copy:
+        dest: /etc/NetworkManager/conf.d/00-wifi-powersave.conf
+        content: |
+          [connection]
+          wifi.powersave=2
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Configure rtw8852be module options
+      copy:
+        dest: /etc/modprobe.d/rtw8852be.conf
+        content: |
+          options rtw89_pci disable_aspm_l1=y disable_aspm_l1ss=y
+          options rtw89pci disable_aspm_l1=y disable_aspm_l1ss=y
+          options rtw89_core disable_ps_mode=y
+          options rtw89core disable_ps_mode=y
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Reload NetworkManager to apply WiFi power save settings
+      systemd:
+        name: NetworkManager
+        state: restarted

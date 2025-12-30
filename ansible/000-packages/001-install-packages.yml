@@ -26,6 +26,9 @@
           - inxi
           - texlive-scheme-full
           - hugo
+          - telnet
+          - vlc
+          - fastfetch
         state: present
 
     - name: Install Docker CE and related packages
@@ -43,6 +46,21 @@
         name: docker
         enabled: true
         state: started
+
+    - name: Install Obsidian from Flathub
+      ansible.builtin.command:
+        cmd: flatpak install -y flathub md.obsidian.Obsidian
+        creates: /var/lib/flatpak/app/md.obsidian.Obsidian
+
+    - name: Install Stremio from Flathub
+      ansible.builtin.command:
+        cmd: flatpak install -y flathub com.stremio.Stremio
+        creates: /var/lib/flatpak/app/com.stremio.Stremio
+    
+    - name: Install DBeaver from Flathub
+      ansible.builtin.command:
+        cmd: flatpak install flathub io.dbeaver.DBeaverCommunity
+        creates: /var/lib/flatpak/app/io.dbeaver.DBeaverCommunity
 
     - name: Swap ffmpeg-free for full ffmpeg
       ansible.builtin.command:
