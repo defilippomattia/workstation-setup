@@ -62,6 +62,11 @@
         cmd: flatpak install flathub io.dbeaver.DBeaverCommunity
         creates: /var/lib/flatpak/app/io.dbeaver.DBeaverCommunity
 
+    - name: Install Bruno from Flathub
+      ansible.builtin.command:
+        cmd: flatpak install flathub com.usebruno.Bruno
+        creates: /var/lib/flatpak/app/com.usebruno.Bruno
+
     - name: Swap ffmpeg-free for full ffmpeg
       ansible.builtin.command:
         cmd: dnf swap -y ffmpeg-free ffmpeg --allowerasing
