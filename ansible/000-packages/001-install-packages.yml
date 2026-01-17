@@ -67,6 +67,11 @@
         cmd: flatpak install flathub com.usebruno.Bruno
         creates: /var/lib/flatpak/app/com.usebruno.Bruno
 
+    - name: Install Discord from Flathub
+      ansible.builtin.command:
+        cmd: flatpak install flathub com.discordapp.Discord
+        creates: /var/lib/flatpak/app/com.discordapp.Discord
+
     - name: Swap ffmpeg-free for full ffmpeg
       ansible.builtin.command:
         cmd: dnf swap -y ffmpeg-free ffmpeg --allowerasing
